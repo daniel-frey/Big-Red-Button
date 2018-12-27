@@ -1,0 +1,245 @@
+Account for .env file on EC2 instance
+
+************************************************************************************
+********************************* Create EC2 Instance ******************************
+************************************************************************************
+************************************************************************************
+
+1. Prerequisites:
+    a. Account with AWS
+        1. Authority to create instances
+        2. Authority to create / view AWS Access Key ID
+        3. Authority to create / view AWS Secret Access Key
+    b. application code folder to deploy
+    c. install pipenv 
+    d. install awscli
+        1. configure aws cli
+            a. AWS Access Key ID:
+            b. AWS Secret Access Key:
+            c. Default region name [None]: us-east-2
+            d. Default output format [None]: json
+    e. pipenv install flask
+
+2. Select a easy connect for host name.  This will allow the user to ssh to the host easily.
+    ssh 34.219.244.XXX
+
+3. Select a name for the security group.
+    command:  
+        aws ec2 create-security-group --group-name USER_SELECTED_GROUP_NAME --description "Security group for development environment"
+    output:
+        {
+            "GroupId": "sg-b018ced5"
+        }
+
+4. Rule for security Group (Defaulted for user at this time)
+    command:
+        aws ec2 authorize-security-group-ingress --group-name USER_SELECTED_GROUP_NAME --protocol tcp --port 22 --cidr 0.0.0.0/0
+    outout:
+        None expected!
+
+5. Create SSH cryptographic key pair to connect to server instance.  Enter file to output.
+    command:
+        aws ec2 create-key-pair --key-name USER_SELECTED_GROUP_NAME --query "KeyMaterial" --output text > USER_OUTPUT_FILE.pem
+    output:
+        None expected!
+
+6. Change the permissions on the file you created.
+    command:
+        chmod 400 USER_OUTPUT_FILE.pem
+    output:
+        None expected!
+
+7. Launch and Connect to the isntance.
+    ami-Defaulted for EC2 on us-west-2
+    security-group-ids: Generated in step 2.
+    key-name: USER_OUTPUT_FILE.pem
+    command:
+        aws ec2 run-instances --image-id ami-0bbe6b35405ecebdb --security-group-ids sg-09845cce8a624ff12 --count 1 --instance-type t2.micro --key-name devenv-key --query "Instances[0].InstanceId"
+    output:
+        "i-0787e4282810ef9cf" - specific user instance.
+
+8. Output server information to file.
+    command:
+        aws ec2 describe-instances > server.json
+    output:
+        None expected!
+
+9. Find the public ID of the instance:
+    command:
+        aws ec2 describe-instances --instance-ids USER_INSTANCE_FROM_STEP6 --query "Reservations[0].Instances[0].PublicIpAddress"
+    output:
+        "34.219.244.XXX"
+
+10. In conjunction with Step 8, create a host name / config for the instance in the users ~/ssh directory.
+    ssh -i USER_OUTPUT_FILE.pem ubuntu@34.219.244.XXX
+    #config
+        Host (name for host)
+        User ubuntu
+        IdentityFile ~/.ssh/USER_OUTPUT_FILE.pem
+
+***************************** End Create EC2 Instance ******************************
+************************************************************************************
+************************************************************************************
+******************************** Start RDS Instance ********************************
+
+
+Need to add RDS stuff here
+
+
+
+
+
+
+
+
+********************************* ***************************************************
+********************************* ON EC2 Instance **********************************
+************************************************************************************
+******************************* ssh USER_HOST_NAME**********************************
+
+Items to Address still:
+# pipenv run pip freeze > requirements.text and get to AWS
+# adjust steps with pem file to move to ./ssh directory and do chmod
+# on EC2 instance
+    # sudo apt-get update
+    # sudo apt-get install nginx build-essential python3-pip -y
+    # cd ~
+    # git clone (link to repo).git Secret
+    # cd src 
+    # pip3 install -r requirements.txt (assumes file retrieved from local computer)
+    # sudo mkdir /etc/systemd/system/nginx.service.d 
+    # sudo nano /etc/systemd/system/nginx.service.d/override.conf 
+        # Add the following line
+            [Service]
+            ExecStartPost=/bin/sleep 0.1
+        # Save and exit file
+    # run
+        # sudo systemctl daemon-reload
+        # sudo nono /etc/nginx/nginx.conf 
+            Delete the contents of this file and past the following:
+            # nginx.conf
+            user www-data;
+            worker_processes 4;
+            pid /var/run/nginx.pid;
+
+            events {
+                worker_connections 1024;
+                # multi_accept on;
+            }
+
+            http {
+
+                ##
+                # Basic Settings
+                ##
+
+                sendfile on;
+                tcp_nopush on;
+                tcp_nodelay on;
+                keepalive_timeout 65;
+                types_hash_max_size 2048;
+                # server_tokens off;
+
+                server_names_hash_bucket_size 128;
+                # server_name_in_redirect off;
+
+                include /etc/nginx/mime.types;
+                default_type application/octet-stream;
+
+                ##
+                # Logging Settings
+                ##
+
+                access_log /var/log/nginx/access.log;
+                error_log /var/log/nginx/error.log;
+
+                ##
+                # Gzip Settings
+                ##
+
+                gzip on;
+                gzip_disable "msie6";
+
+                ##
+                # Virtual Host Configs
+                ##
+
+                include /etc/nginx/conf.d/*.conf;
+                include /etc/nginx/sites-enabled/*;
+            }
+    # Add a new, project specific configuration for your ngix server
+        sudo nano /etc/nginx/conf.d/PROJECT_NAME.conf
+
+        # (project_name).conf
+        upstream (project_name) {
+            server 127.0.0.1:8000;
+        }
+
+        server {
+            listen 80;
+
+            server_name (EC2 public DNS);
+
+            access_log  /home/ubuntu/.local/nginx.access.log;
+
+            location / {
+                proxy_set_header        Host $http_host;
+                proxy_set_header        X-Real-IP $remote_addr;
+                proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header        X-Forwarded-Proto $scheme;
+
+                client_max_body_size    10m;
+                client_body_buffer_size 128k;
+                proxy_connect_timeout   60s;
+                proxy_send_timeout      90s;
+                proxy_read_timeout      90s;
+                proxy_buffering         off;
+                proxy_temp_file_write_size 64k;
+                proxy_pass http://(project_name);
+                proxy_redirect          off;
+            }
+        }
+
+    # Validate updated nginx Configs
+        sudo nginx -t
+        nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+        nginx: configuration file /etc/nginx/nginx.conf test is successful 
+
+    # Check that nginx is working properly
+        sudo systemctl status nginx
+        #if nginx is failing:
+        sudo systemctl restart nginx
+        # Error logs avaliable at /var/log/nginx/error.log
+    
+    # Install gunicorn with pip3
+        pip3 install gunicorn python-dotenv
+    # Create a gunicorn configuration file:
+        sudo nano /etc/systemd/system/gunicorn.service
+
+        #add the following:
+         # gunicorn.service
+        [Unit]
+        Description=(your description)
+        After=network.target
+
+        [Service]
+        User=ubuntu
+        Group=www-data
+        EnvironmentFile=/home/ubuntu/src/.env
+        WorkingDirectory=/home/ubuntu/src
+        ExecStart=/home/ubuntu/.local/bin/gunicorn --access-logfile - -w 3 wsgi:app
+
+        [Install]
+        WantedBy=multi-user.target
+
+    #Start up gunicorn and check it is working properly:
+        sudo systemctl enable gunicorn
+        sudo systemctl start gunicorn
+        sudo systemctl status gunicorn
+
+    # Need to add in database migration items:
+
+****************************** End EC2 Connection **********************************
+************************************************************************************
+************************************************************************************
+************************************************************************************
