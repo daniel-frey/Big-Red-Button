@@ -1,4 +1,4 @@
-def read_file();
+def read_file():
     """
     """
     # with open("./data.txt", "rt")
@@ -30,7 +30,10 @@ def build_keys(contents):
 def greeting():
     """
     """
-    print('Welcome to our AWS deployment helper. \nIn order to use this product, you will need an AWS account.\n You will need to install the AWS Command Line Interface, \n and configure your files  https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html \n \n Please proceed once completed')
+    print('Welcome to our AWS deployment helper. \nIn order to use this product, you will need an AWS account.\n '
+          'You will need to install the AWS Command Line Interface, \n and configure your files '
+          'https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html \n \n '
+          'Please proceed once completed')
 
 
 def run():
