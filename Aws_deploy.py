@@ -5,6 +5,7 @@ def read_file();
     with open(raw) as f:
         return f.read()
 
+
 def write_file(path, contents):
     """ function to write to file"""
     with open(path, 'w') as wf:
@@ -24,13 +25,6 @@ def build_keys(contents):
         found_word = contents[first:second]
         word_list.append(found_word)
     return (word_list)
-
-
-def build_stripped(contents):
-    """This removes the keys from the raw txt leaving a stripped text """
-    regex = r"\{.*?\}"
-    output = re.sub(regex, '{}', contents)
-    return output
 
 
 def greeting():
