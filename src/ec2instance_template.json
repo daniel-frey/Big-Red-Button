@@ -24,7 +24,7 @@
         }
     ],
     "KernelId": "",
-    "KeyName": "{key_name}",
+    "KeyName": "<key_name>",
     "MaxCount": 0,
     "MinCount": 0,
     "Monitoring": {
@@ -41,10 +41,10 @@
     },
     "RamdiskId": "",
     "SecurityGroupIds": [
-        "{sec_grp_ids}"
+        "<sec_grp_ids>"
     ],
     "SecurityGroups": [
-        "{sec_grp}"
+        "<sec_grp>"
     ],
     "SubnetId": "",
     "UserData": "",
