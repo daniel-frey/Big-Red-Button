@@ -1,4 +1,4 @@
-from .file_io import read_file, write_file
+from file_io import read_file, write_file
 from textwrap import dedent
 import re
 import sys
@@ -31,9 +31,9 @@ def prompt_for_file():
     """Prompt the user for a filename"""
     file = ''
     while file is '':
-        file = input('Please enter a filename')
+        file = input('Please enter a filename: ')
         if input is '':
-            print('Please enter a filename')
+            print('Please enter a filename: ')
     return file
 
 
@@ -61,11 +61,11 @@ def run_template(ec2instance_template):
     if ec2instance_template[0] is False:
         print(ec2instance_template[1])
     else:
-        answers = re.findall(r'\%.*?\%', ec2instance_template[1])
-        ec2instance_template[1] = re.sub(r'\%.*?\%', '%%', ec2instance_template[1])
+        answers = re.findall(r'\%.*?\#', ec2instance_template[1])
+        ec2instance_template[1] = re.sub(r'\%.*?\#', '%#', ec2instance_template[1])
 
         for i in range(len(answers)):
-            answers[i] = answers[i].strip('%%')
+            answers[i] = answers[i].strip('%#')
 
         user_answers = prompt_the_user(answers)
 
@@ -77,7 +77,7 @@ def run_template(ec2instance_template):
 
 def prompt_the_user(answers):
     """Take in the template and format the output"""
-    print('Beginning')
+    print('Beginning template creation \n')
     answers_out = []
 
     for i in range(len(answers)):
@@ -91,7 +91,7 @@ def prompt_the_user(answers):
 
 
 def user_output(template_output):
-    """Tkae in the template, and prompt the user"""
+    """Take in the template, and prompt the user"""
     if template_output[0] is True:
         print('Your template: \n\n')
         print(template_output[1])

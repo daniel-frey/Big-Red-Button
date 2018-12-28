@@ -5,32 +5,29 @@ def read_file(filename):
     The output will be the contents of the said file."""
 
     if type(filename) is not str:
-        raise TypeError('the file must be a string')
-
-    with open('./' + filename + '.json') as f:
-        return f.read()
+        raise TypeError('the file must be a string.')
 
     try:
         with open(filename + '.json') as f:
             return f.read()
     except FileNotFoundError:
-        raise FileNotFoundError('the specified file was not found')
-    except IOError('Your file could not be read')
+        raise FileNotFoundError('the specified file was not found.')
+    except IOError:
+        raise IOError('Your file could not be read.')
 
 
 def write_file(content, filename):
     """Write a new json file"""
-
     if type(content) is not str or type(filename) is not str:
         raise TypeError('Please enter a valid filename.')
 
     try:
         with open('./' + filename + '.json', 'w') as f:
             f.write(content)
-            return ('Your file has been created')
+            return ('Your file has been created.')
     except IOError:
-        return ('Seomething went wrong, please try again')
+        return ('Something went wrong, please try again.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print(read_file('sterile'))
