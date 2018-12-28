@@ -2,7 +2,6 @@ from file_io import read_file, write_file
 from textwrap import dedent
 import re
 import sys
-import json
 
 def greet_user():
     """Greet the user upon application start."""
@@ -44,6 +43,9 @@ def read_template(file):
 
     try:
         content = read_file(file)
+
+        # content => '...'
+
         if '<' in content:
             return [True, content]
 
@@ -68,8 +70,8 @@ def run_template(template):
             answers[i] = answers[i].strip('<>')
 
         user_answers = prompt_the_user(answers)
-        # import pdb; pdb.set_trace()
         print(len(tuple(user_answers)))
+
         template[1] = template[1].format(*tuple(user_answers))
         return template
 
