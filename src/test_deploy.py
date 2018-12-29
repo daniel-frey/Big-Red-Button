@@ -1,4 +1,4 @@
-import mock
+
 import pytest
 from . import Aws_deploy
 from .Aws_deploy import greet_user, read_template, prompt_for_file
@@ -9,12 +9,11 @@ def test_cc_import():
     assert greet_user
 
 
-# def test_greet_user(capsys):
-#     """
-#     """
-#     greet_user()
-#     captured = capsys.readouterr()
-    # assert captured.out == 'AWS Deployment automation\nYou will need to have some prerequisites before you are able to begin\nYou will receive a series of prompts. Please read the questions carefully\nOnce the questions have finished, a json file will be written that will be used for deployment\nTo exit at any time, type "quit".\n'
+def test_greet_user():
+    """
+    """
+    greet_user()
+    assert True
 
 
 # def test_prompt_for_file():
@@ -25,47 +24,57 @@ def test_cc_import():
 #         assert prompt_for_file.function() == 'Please enter a filename: '
 
 
-def test_prompt_for_file_filled(capsys):
+def test_prompt_for_file_filled():
     input_values = ['test']
 
     def mock_input(s):
         return input_values.pop(0)
 
     Aws_deploy.input = mock_input
+    prompt = prompt_for_file()
 
-    # prompt_for_file.main()
-    prompt_for_file()
-    out, err = capsys.readouterr()
-
-    assert out == 'test'
-    # assert err == ''
+    assert prompt == 'test'
 
 
-def test_prompt_for_file_empty(capsys):
-    input_values = ['']
+# def test_prompt_for_file_empty():
+#     input_values = ['', 'test_2']
 
-    def mock_input(s):
-        return input_values.pop(0)
+#     def mock_input(s):
+#         return input_values.pop(0)
 
-    Aws_deploy.input = mock_input
+#     Aws_deploy.input = mock_input
+#     prompt1 = prompt_for_file()
+#     prompt2 = prompt_for_file()
 
-    # prompt_for_file.main()
-    prompt_for_file()
-    out, err = capsys.readouterr()
+#     assert prompt1 == 'Please enter a filename: '
+#     assert prompt2 == 'test_2'
 
-    assert out == 'Please enter a filename: '
-    # assert err == ''
+
+def test_read_template_correct_type():
+    """
+    """
+    input_values = 'testType'
+
+    read_template(input_values)
+    assert True
+
+
+# def test_read_template_wrong_type():
+#     """
+#     """
+#     input_values = 'wrongType'
+#     with pytest.raises(IOError) as e:
+#             read_template(input_values)
+#     assert e.type == IOError
 
 
 def test_read_template_exit():
     """
     """
-    pass
-#     with pytest.raises(SystemExit) as e:
-#             mymodule.will_exit_somewhere_down_the_stack()
-#     assert e.type == SystemExit
-
-
+    input_values = 'exit'
+    with pytest.raises(SystemExit) as e:
+            read_template(input_values)
+    assert e.type == SystemExit
 
 # def test_run_template():
 #     """

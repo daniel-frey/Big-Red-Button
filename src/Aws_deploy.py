@@ -34,6 +34,7 @@ def prompt_for_file():
         file = input('Please enter a filename: ')
         if input is '':
             print('Please enter a filename: ')
+
     return file
 
 
