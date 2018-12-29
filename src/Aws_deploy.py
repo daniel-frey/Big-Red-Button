@@ -43,9 +43,6 @@ def read_template(file):
 
     try:
         content = read_file(file)
-
-        # content => '...'
-
         if '<' in content:
             return [True, content]
 
@@ -70,9 +67,10 @@ def run_template(template):
             answers[i] = answers[i].strip('<>')
 
         user_answers = prompt_the_user(answers)
-        print(len(tuple(user_answers)))
 
+        print(len(tuple(user_answers)))
         template[1] = template[1].format(*tuple(user_answers))
+
         return template
 
 
