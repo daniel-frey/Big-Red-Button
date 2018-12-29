@@ -1,3 +1,6 @@
+import json
+
+
 def read_file(filename):
     """Read a file and return the output.
 
@@ -9,7 +12,10 @@ def read_file(filename):
 
     try:
         with open(filename + '.json') as f:
-            return f.read()
+            data = f.read()
+
+            return data
+
     except FileNotFoundError:
         raise FileNotFoundError('the specified file was not found.')
     except IOError:
@@ -23,6 +29,7 @@ def write_file(content, filename):
 
     try:
         with open('./' + filename + '.json', 'w') as f:
+            # data = json.dump(f, content)
             f.write(content)
             return ('Your file has been created.')
     except IOError:
