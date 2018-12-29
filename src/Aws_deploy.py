@@ -1,7 +1,8 @@
-from file_io import read_file, write_file
+from .file_io import read_file, write_file
 from textwrap import dedent
 import re
 import sys
+
 
 def greet_user():
     """Greet the user upon application start."""
@@ -33,6 +34,7 @@ def prompt_for_file():
         file = input('Please enter a filename: ')
         if input is '':
             print('Please enter a filename: ')
+
     return file
 
 
