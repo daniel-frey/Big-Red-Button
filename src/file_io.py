@@ -13,7 +13,6 @@ def read_file(filename):
     try:
         with open(filename + '.json') as f:
             data = f.read()
-
             return data
 
     except FileNotFoundError:
