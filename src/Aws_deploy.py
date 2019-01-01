@@ -79,6 +79,7 @@ def run_template(template):
 def prompt_the_user(answers):
     """Take in the template and format the output"""
     print('Beginning template creation')
+    import pdb; pdb.set_trace()
     answers_out = []
 
     for i in range(len(answers)):
