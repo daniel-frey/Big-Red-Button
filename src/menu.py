@@ -3,6 +3,7 @@ import sys
 import os
 import pyfiglet
 import getpass
+import json
 
 # Gloabl Variables
 aws_host = 'Input Needed'
@@ -14,11 +15,12 @@ db_name = 'Input Needed'
 db_instance_id = 'Input Needed'
 db_storage = 0
 db_instance_class = 'Input Needed'
-db_engine = 'POSTGRESS'
+db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 vpc_group = 'Input Needed'
 key_name = 'Input Needed'
+ipv6_address = '0.0.0.0'
 
 
 def signage():
@@ -82,7 +84,7 @@ def display_menu():
         else:
             print(f'14.  EC2: Key Name: \033[1;33m { key_name } \033[0;0m')
 
-        print('15.  Display JSON File')
+        # print('15.  Display JSON File')
 
         answer = input('\n(\033[1;31m!\033[0;0m) Execute (\033[1;31mq\033[0;0m) Quit (\033[1;31m?\033[0;0m) Help \
         \nPlease Enter a Selection: ')
@@ -114,7 +116,8 @@ def display_menu():
             SecurityGroups = input('Enter a security group(single word): ')
             if SecurityGroups == '':
                 SecurityGroups = 'Input Needed'
-            # This will then do a request to amazon to get the Group_ID back from amazon.
+            # TODO This will then do a request to amazon to get the Group_ID back from amazon.
+            # TODO add error checking to make sure it does not start with SG
 
         elif answer == '5':
             print('This option is currently not configurable!  JSON Only at this time.')
@@ -172,11 +175,14 @@ def display_menu():
             if key_name == '':
                 key_name = 'Input Needed'
 
-        elif answer == '15':
-            print('DISPLAY FILE will go!')
-            input('Press ENTER to continue...')
+        # elif answer == '15':
+        #     write_json()
+        #     print('Still need to display the file')
 
         elif answer == '!':
+            get_aws_sg_id()
+            write_json()
+            send_json_to_aws()
             print('File Creation in Progress')
             print('Sending JSON to AWS for initialization')
             input('Press ENTER to continue...')
@@ -185,6 +191,44 @@ def display_menu():
         else:
             print('\nInvalid!!!!  Please enter a valid option!')
             input('Press ENTER to continue...')
+
+
+def get_aws_sg_id():
+    """."""
+    return
+
+
+def write_json():
+    """."""
+    global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name
+    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, vpc_group
+    ec2_data = open('ec2instance_template.json').read()
+    ec2_json_data = json.loads(ec2_data)
+    ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
+    ec2_json_data['KeyName'] = key_name
+    ec2_json_data['SecurityGroupIds'] = []
+    ec2_json_data['SecurityGroups'] = security_groups
+    ec2_json_data['ImageId'] = image_id
+    # ec2_json_data['Placement'][0]["AvailabilityZone"] = region
+    with open('ec2_instance_completed.json', 'w') as f:
+        json.dump(ec2_json_data, f, sort_keys=False, indent=4)
+    rds_data = open('rdsinstance_template.json').read()
+    rds_json_data = json.loads(rds_data)
+    rds_json_data['DBName'] = db_name
+    rds_json_data['DBInstanceIdentifier'] = db_instance_id
+    rds_json_data['AllocatedStorage'] = db_storage
+    rds_json_data['DBInstanceClass'] = db_instance_class
+    rds_json_data['Engine'] = db_engine
+    rds_json_data['MasterUsername'] = db_user_name
+    rds_json_data['MasterUserPassword'] = db_user_password
+    rds_json_data['VpcSecurityGroupIds'] = vpc_group
+    with open('rdsinstance_template_completed.json', 'w') as f2:
+        json.dump(rds_json_data, f2, sort_keys=False, indent=4)
+    return
+
+
+def send_json_to_aws():
+    """."""
 
 
 def clear_screen():
