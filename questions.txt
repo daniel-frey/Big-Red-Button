@@ -11,7 +11,7 @@ Account for .env file on EC2 instance
         2. Authority to create / view AWS Access Key ID
         3. Authority to create / view AWS Secret Access Key
     b. application code folder to deploy
-    c. install pipenv 
+    c. install pipenv
     d. install awscli
         1. configure aws cli
             a. AWS Access Key ID:
@@ -24,7 +24,7 @@ Account for .env file on EC2 instance
     ssh 34.219.244.XXX
 
 3. Select a name for the security group.
-    command:  
+    command:
         aws ec2 create-security-group --group-name USER_SELECTED_GROUP_NAME --description "Security group for development environment"
     output:
         {
@@ -49,7 +49,7 @@ Account for .env file on EC2 instance
     output:
         None expected!
 
-7. Launch and Connect to the isntance.
+7. Launch and Connect to the instance.
     ami-Defaulted for EC2 on us-west-2
     security-group-ids: Generated in step 2.
     key-name: USER_OUTPUT_FILE.pem
@@ -105,17 +105,17 @@ Items to Address still:
     # sudo apt-get install nginx build-essential python3-pip -y
     # cd ~
     # git clone (link to repo).git Secret
-    # cd src 
+    # cd src
     # pip3 install -r requirements.txt (assumes file retrieved from local computer)
-    # sudo mkdir /etc/systemd/system/nginx.service.d 
-    # sudo nano /etc/systemd/system/nginx.service.d/override.conf 
+    # sudo mkdir /etc/systemd/system/nginx.service.d
+    # sudo nano /etc/systemd/system/nginx.service.d/override.conf
         # Add the following line
             [Service]
             ExecStartPost=/bin/sleep 0.1
         # Save and exit file
     # run
         # sudo systemctl daemon-reload
-        # sudo nono /etc/nginx/nginx.conf 
+        # sudo nono /etc/nginx/nginx.conf
             Delete the contents of this file and past the following:
             # nginx.conf
             user www-data;
@@ -203,14 +203,14 @@ Items to Address still:
     # Validate updated nginx Configs
         sudo nginx -t
         nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
-        nginx: configuration file /etc/nginx/nginx.conf test is successful 
+        nginx: configuration file /etc/nginx/nginx.conf test is successful
 
     # Check that nginx is working properly
         sudo systemctl status nginx
         #if nginx is failing:
         sudo systemctl restart nginx
         # Error logs avaliable at /var/log/nginx/error.log
-    
+
     # Install gunicorn with pip3
         pip3 install gunicorn python-dotenv
     # Create a gunicorn configuration file:
