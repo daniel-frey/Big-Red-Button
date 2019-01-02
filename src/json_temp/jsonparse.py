@@ -5,7 +5,8 @@ json_data = json.loads(file_data)
 
 print(json_data)
 
-json_data['name'] = 'roger'
+temp_data = input('Enter a user_name')
+json_data['name'] = temp_data
 
 print(json_data)
 
