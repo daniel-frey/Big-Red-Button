@@ -5,6 +5,7 @@ ec2_json_data = json.loads(ec2_data)
 
 print(ec2_json_data)
 
+
 ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
 ec2_json_data['KeyName'] = key_name
 ec2_json_data['SecurityGroupIds'] = []
