@@ -15,7 +15,7 @@
             "NoDevice": ""
         }
     ],
-    "ImageId": "ami-0bbe6b35405ecebdb",
+    "ImageId": "",
     "InstanceType": "t2.micro",
     "Ipv6AddressCount": 0,
     "Ipv6Addresses": [
@@ -24,7 +24,7 @@
         }
     ],
     "KernelId": "",
-    "KeyName": "<key_name>",
+    "KeyName": "",
     "MaxCount": 0,
     "MinCount": 0,
     "Monitoring": {
@@ -41,11 +41,9 @@
     },
     "RamdiskId": "",
     "SecurityGroupIds": [
-        "<sec_grp_ids>"
+        ""
     ],
-    "SecurityGroups": [
-        "<sec_grp>"
-    ],
+    "SecurityGroups": "",
     "SubnetId": "",
     "UserData": "",
     "AdditionalInfo": "",
@@ -70,7 +68,7 @@
             "Ipv6AddressCount": 0,
             "Ipv6Addresses": [
                 {
-                    "Ipv6Address": ""
+                    "Ipv6Address": "temp"
                 }
             ],
             "NetworkInterfaceId": "",
