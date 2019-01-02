@@ -4,21 +4,22 @@ import os
 import pyfiglet
 import getpass
 import json
+import time
 
 # Gloabl Variables
 aws_host = 'Input Needed'
 security_groups = 'Input Needed'
-region = 'US-WEST-2'
+aws_security_groups = ''
+region = 'us-west-2'
 output_format = 'JSON'
-image_id = 'ami-0bbe6b35405ecebdb'  # need to fill in actual instance ID
+image_id = 'ami-0bbe6b35405ecebdb'
 db_name = 'Input Needed'
 db_instance_id = 'Input Needed'
 db_storage = 0
-db_instance_class = 'Input Needed'
+db_instance_class = 'db.t2.micro'
 db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
-vpc_group = 'Input Needed'
 key_name = 'Input Needed'
 ipv6_address = '0.0.0.0'
 
@@ -33,11 +34,11 @@ def display_menu():
     """."""
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name
-    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, vpc_group
+    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
     while answer != 'quit' or answer != 'exit' or answer != 'q':
         signage()
         if aws_host == 'Input Needed':
-            print(f'1.  EC2: Host Name (used for quick connect to AWS) : \033[1;31m { aws_host } \033[0;0m')
+            print(f'1.  EC2: Host Name (used for quick connect to AWS): \033[1;31m { aws_host } \033[0;0m')
         else:
             print(f'1.  EC2: Host Name (used for quick connect to AWS): \033[1;33m { aws_host } \033[0;0m')
         print(f'2.  EC2: Current Region: \033[1;33m { region } \033[0;0m')
@@ -54,7 +55,7 @@ def display_menu():
         if db_instance_id == 'Input Needed':
             print(f'7.  RDS: DataBase Instance ID: \033[1;31m { db_instance_id } \033[0;0m')
         else:
-            print(f'7.  RDS: ataBase Instance ID: \033[1;33m { db_instance_id } \033[0;0m')
+            print(f'7.  RDS: DataBase Instance ID: \033[1;33m { db_instance_id } \033[0;0m')
         if db_storage == 0:
             print(f'8.  RDS: DataBase Allocated Storage: \033[1;31m { db_storage } \033[0;0m')
         else:
@@ -75,10 +76,10 @@ def display_menu():
             print(f'12.  RDS: DataBase User Password: \033[1;31m { db_user_password } \033[0;0m')
         else:
             print(f'12.  RDS: DataBase User Password: \033[1;33m HIDDEN \033[0;0m')
-        if vpc_group == 'Input Needed':
-            print(f'13.  RDS: DataBase VPC Group: \033[1;31m { vpc_group } \033[0;0m')
+        if security_groups == 'Input Needed':
+            print(f'13.  RDS: DataBase VPC Group: \033[1;31m { security_groups } \033[0;0m')
         else:
-            print(f'13.  RDS: DataBase VPC Group: \033[1;33m { vpc_group } \033[0;0m')
+            print(f'13.  RDS: DataBase VPC Group: \033[1;33m { security_groups } \033[0;0m')
         if key_name == 'Input Needed':
             print(f'14.  EC2: Key Name: \033[1;31m { key_name } \033[0;0m')
         else:
@@ -113,9 +114,9 @@ def display_menu():
             input('Press ENTER to continue...')
 
         elif answer == '4':
-            SecurityGroups = input('Enter a security group(single word): ')
-            if SecurityGroups == '':
-                SecurityGroups = 'Input Needed'
+            security_groups = input('Enter a security group(single word): ')
+            if security_groups == '':
+                security_groups = 'Input Needed'
             # TODO This will then do a request to amazon to get the Group_ID back from amazon.
             # TODO add error checking to make sure it does not start with SG
 
@@ -149,12 +150,11 @@ def display_menu():
                 input('Press ENTER to continue...')
 
         elif answer == '9':
-            db_instance_class = input('Enter DataBase Instace Class: ')
-            if db_instance_class == '':
-                db_instance_class = 'Input Needed'
+            print('This option is currently not configurable!  default free tier.')
+            input('Press ENTER to continue...')
 
         elif answer == '10':
-            print('This option is currently not configurable!  POSTGRESS Only.')
+            print('This option is currently not configurable!  Postgres Only.')
             input('Press ENTER to continue...')
 
         elif answer == '11':
@@ -180,35 +180,53 @@ def display_menu():
         #     print('Still need to display the file')
 
         elif answer == '!':
-            get_aws_sg_id()
-            write_json()
-            send_json_to_aws()
-            print('File Creation in Progress')
-            print('Sending JSON to AWS for initialization')
-            input('Press ENTER to continue...')
-            break
+            execute_aws()
 
         else:
             print('\nInvalid!!!!  Please enter a valid option!')
             input('Press ENTER to continue...')
 
 
+def execute_aws():
+    """."""
+    print('Generating AWS Security Group ID...')
+    get_aws_sg_id()
+    time.sleep(4)
+    print('Generating JSON file...')
+    write_json()
+    time.sleep(3)
+    print('Initiating EC2 Instance...')
+    send_ec2_json_to_aws()
+    time.sleep(4)
+    # print('Initiating RDS Instance...')
+    # send_rds_json_to_aws
+    # time.sleep(4)
+    # print('EC2 & RDS complete.  Running setup on EC2 Instance.')
+    exit()
+
+
 def get_aws_sg_id():
     """."""
-    return
+    global aws_security_groups
+    os.system(f"aws ec2 create-security-group --group-name { security_groups } --description 'Security group for \
+    development environment' --output json > sg_id.json")
+    sg_aws = open('sg_id.json').read()
+    sg_aws_json = json.loads(sg_aws)
+    aws_security_groups = sg_aws_json["GroupId"]
 
 
 def write_json():
     """."""
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name
-    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, vpc_group
+    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
     ec2_data = open('ec2instance_template.json').read()
     ec2_json_data = json.loads(ec2_data)
     ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
     ec2_json_data['KeyName'] = key_name
-    ec2_json_data['SecurityGroupIds'] = []
-    ec2_json_data['SecurityGroups'] = security_groups
+    ec2_json_data['SecurityGroupIds'] = [aws_security_groups]
+    ec2_json_data['SecurityGroups'] = [security_groups]
     ec2_json_data['ImageId'] = image_id
+    # ec2_json_data['AvailabilityZone'] = region
     # ec2_json_data['Placement'][0]["AvailabilityZone"] = region
     with open('ec2_instance_completed.json', 'w') as f:
         json.dump(ec2_json_data, f, sort_keys=False, indent=4)
@@ -221,14 +239,23 @@ def write_json():
     rds_json_data['Engine'] = db_engine
     rds_json_data['MasterUsername'] = db_user_name
     rds_json_data['MasterUserPassword'] = db_user_password
-    rds_json_data['VpcSecurityGroupIds'] = vpc_group
+    rds_json_data['VpcSecurityGroupIds'] = [aws_security_groups]
+    # rds_json_data['AvailabilityZone'] = region
     with open('rdsinstance_template_completed.json', 'w') as f2:
         json.dump(rds_json_data, f2, sort_keys=False, indent=4)
     return
 
 
-def send_json_to_aws():
+def send_ec2_json_to_aws():
     """."""
+    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json')
+    return
+
+
+def send_rds_json_to_aws():
+    """."""
+    os.system('aws rds run-instances --cli-input-json file://rdsinstance_template_completed.json')
+    return
 
 
 def clear_screen():
