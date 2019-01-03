@@ -21,7 +21,6 @@ db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 key_name = 'Input Needed'
-# ipv6_address = '0.0.0.0'
 
 
 def signage():
@@ -198,11 +197,11 @@ def execute_aws():
     print('Initiating EC2 Instance...')
     send_ec2_json_to_aws()
     time.sleep(4)
-    # print('Initiating RDS Instance...')
-    # send_rds_json_to_aws
-    # time.sleep(4)
-    # print('EC2 & RDS complete.  Running setup on EC2 Instance.')
-    # exit()
+    print('Initiating RDS Instance...')
+    send_rds_json_to_aws()
+    time.sleep(4)
+    print('EC2 & RDS complete.  Running setup on EC2 Instance.')
+    exit()
 
 
 def get_aws_sg_id():
@@ -221,13 +220,10 @@ def write_json():
     global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
     ec2_data = open('ec2instance_template.json').read()
     ec2_json_data = json.loads(ec2_data)
-    # ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
     ec2_json_data['KeyName'] = key_name
     ec2_json_data['SecurityGroupIds'] = [aws_security_groups]
     ec2_json_data['SecurityGroups'] = [security_groups]
     ec2_json_data['ImageId'] = image_id
-    # ec2_json_data['AvailabilityZone'] = region
-    # ec2_json_data['Placement'][0]["AvailabilityZone"] = region
     with open('ec2_instance_completed.json', 'w') as f:
         json.dump(ec2_json_data, f, sort_keys=False, indent=4)
     rds_data = open('rdsinstance_template.json').read()
@@ -240,7 +236,6 @@ def write_json():
     rds_json_data['MasterUsername'] = db_user_name
     rds_json_data['MasterUserPassword'] = db_user_password
     rds_json_data['VpcSecurityGroupIds'] = [aws_security_groups]
-    # rds_json_data['AvailabilityZone'] = region
     with open('rdsinstance_template_completed.json', 'w') as f2:
         json.dump(rds_json_data, f2, sort_keys=False, indent=4)
     return
