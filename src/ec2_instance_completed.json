@@ -1,0 +1,19 @@
+{
+    "InstanceType": "t2.micro",
+    "KeyName": "testgroup-key",
+    "Monitoring": {
+        "Enabled": true
+    },
+    "Placement": {
+        "AvailabilityZone": "us-west-2a"
+    },
+    "SecurityGroupIds": [
+        "sg-0f2b0078e9cf33bca"
+    ],
+    "SecurityGroups": [
+        "secgroupmaker"
+    ],
+    "DryRun": false,
+    "InstanceInitiatedShutdownBehavior": "stop",
+    "ImageId": "ami-01e24be29428c15b2"
+}
