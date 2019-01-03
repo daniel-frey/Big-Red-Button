@@ -1,14 +1,14 @@
 {
-    "DBName": "{db_name}",
-    "DBInstanceIdentifier": "{db_instance_id}",
-    "AllocatedStorage": "{db_storage}",
-    "DBInstanceClass": "{db_instance_class}",
-    "Engine": "{db_engine}",
-    "MasterUsername": "{db_user_name}",
-    "MasterUserPassword": "{db_user_password}",
+    "DBName": "",
+    "DBInstanceIdentifier": "",
+    "AllocatedStorage": "",
+    "DBInstanceClass": "",
+    "Engine": "",
+    "MasterUsername": "",
+    "MasterUserPassword": "",
 
     "VpcSecurityGroupIds": [
-        "{vpc_group}"
+        ""
     ],
     "AvailabilityZone": "us-west-2"
 }
