@@ -25,16 +25,16 @@ def test_cc_import():
 #         assert prompt_for_file.function() == 'Please enter a filename: '
 
 
-def test_display_menu_inputs_1():
-    # assert menu.aws_host == 'Input Needed'
-    # os.system('aws ec2 delete-security-group --group-name securegroup')
-    input_values = ['1', 'testhost', '4', 'securegroup', '6', 'testdb', '7', 'dbtestinstance', '8', '50', '11',  'testuser', '12', "password", '14', 'testgroup-key', 'q']
+# def test_display_menu_inputs_1():
+#     # assert menu.aws_host == 'Input Needed'
+#     # os.system('aws ec2 delete-security-group --group-name securegroup')
+#     input_values = ['1', 'testhost', '4', 'securegroup', '6', 'testdb', '7', 'dbtestinstance', '8', '50', '11',  'testuser', '12', "password", '14', 'testgroup-key', 'q']
 
-    def mock_input(s):
-        return input_values.pop(0)
+#     def mock_input(s):
+#         return input_values.pop(0)
 
-    menu.input = mock_input
-    menu.display_menu()
+#     menu.input = mock_input
+#     menu.display_menu()
 
     # assert menu.aws_host == 'testhost'
 

@@ -33,7 +33,7 @@ def signage():
     print(result)
 
 
-def display_menu():
+def display_menu():  # pragma: no cover
     """."""
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name, ready_to_go
