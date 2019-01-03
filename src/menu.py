@@ -335,7 +335,7 @@ def user_passwords():
 
 def send_ec2_json_to_aws():
     """Command to create the EC2 instance with menu data."""
-    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json')
+    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud.txt')
     return
 
 
