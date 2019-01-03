@@ -12,7 +12,7 @@ security_groups = 'Input Needed'
 aws_security_groups = ''
 region = 'us-west-2'
 output_format = 'JSON'
-image_id = 'ami-0bbe6b35405ecebdb'
+image_id = 'ami-01e24be29428c15b2'
 db_name = 'Input Needed'
 db_instance_id = 'Input Needed'
 db_storage = 0
@@ -202,6 +202,12 @@ def execute_aws():
     time.sleep(4)
     print('EC2 & RDS complete.  Running setup on EC2 Instance.')
     exit()
+    print('Initiating RDS Instance...')
+    send_rds_json_to_aws
+    time.sleep(4)
+    print('EC2 & RDS complete.  Running setup on EC2 Instance.')
+    exit()
+
 
 
 def get_aws_sg_id():
