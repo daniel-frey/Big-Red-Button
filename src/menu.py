@@ -249,7 +249,7 @@ def send_ec2_json_to_aws():
 
 def send_rds_json_to_aws():
     """."""
-    os.system('aws rds run-instances --cli-input-json file://rdsinstance_template_completed.json')
+    os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
 
 
