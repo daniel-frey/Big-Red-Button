@@ -21,7 +21,7 @@ db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 key_name = 'Input Needed'
-ipv6_address = '0.0.0.0'
+# ipv6_address = '0.0.0.0'
 
 
 def signage():
@@ -202,7 +202,7 @@ def execute_aws():
     # send_rds_json_to_aws
     # time.sleep(4)
     # print('EC2 & RDS complete.  Running setup on EC2 Instance.')
-    exit()
+    # exit()
 
 
 def get_aws_sg_id():
@@ -221,7 +221,7 @@ def write_json():
     global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
     ec2_data = open('ec2instance_template.json').read()
     ec2_json_data = json.loads(ec2_data)
-    ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
+    # ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
     ec2_json_data['KeyName'] = key_name
     ec2_json_data['SecurityGroupIds'] = [aws_security_groups]
     ec2_json_data['SecurityGroups'] = [security_groups]
