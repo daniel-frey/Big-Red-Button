@@ -34,7 +34,7 @@ def signage():
     print(result)
 
 
-def display_menu():
+def display_menu():  # pragma: no cover
     """."""
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name, ready_to_go
@@ -130,6 +130,7 @@ def display_menu():
 
         answer = input('\n(\033[1;31m!\033[0;0m) Execute (\033[1;31mq\033[0;0m) Quit (\033[1;31m?\033[0;0m) Help \
         \nPlease Enter a Selection: ')
+
         if answer == '?':
             print('1. EC2 Host Name - Single Word.  Used to connect via SSH to the EC2 instance as such: ssh ec2_host')
             print('2. Region - Menu selection:  Determines which region servers are used for instance.')

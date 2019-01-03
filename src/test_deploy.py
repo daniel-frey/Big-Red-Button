@@ -1,19 +1,20 @@
-
+import os
 import pytest
-from . import Aws_deploy
-from .Aws_deploy import greet_user, read_template, prompt_for_file
-from .file_io import read_file, write_file
+from . import menu
+# from . import ec2instance_template
+
 
 
 def test_cc_import():
-    assert greet_user
-
-
-def test_greet_user():
     """
     """
-    greet_user()
-    assert True
+    assert menu.signage
+
+
+# def test_json_import():
+#     """
+#     """
+#     assert ec2_instance_completed
 
 
 # def test_prompt_for_file():
@@ -24,16 +25,32 @@ def test_greet_user():
 #         assert prompt_for_file.function() == 'Please enter a filename: '
 
 
-def test_prompt_for_file_filled():
-    input_values = ['test']
+# def test_display_menu_inputs_1():
+#     # assert menu.aws_host == 'Input Needed'
+#     # os.system('aws ec2 delete-security-group --group-name securegroup')
+#     input_values = ['1', 'testhost', '4', 'securegroup', '6', 'testdb', '7', 'dbtestinstance', '8', '50', '11',  'testuser', '12', "password", '14', 'testgroup-key', 'q']
 
-    def mock_input(s):
-        return input_values.pop(0)
+#     def mock_input(s):
+#         return input_values.pop(0)
 
-    Aws_deploy.input = mock_input
-    prompt = prompt_for_file()
+#     menu.input = mock_input
+#     menu.display_menu()
 
-    assert prompt == 'test'
+    # assert menu.aws_host == 'testhost'
+
+
+# def test_display_menu_inputs_1(capsys):
+
+#     input_values = ['1']
+
+#     def mock_input(s):
+#         return input_values.pop(0)
+
+#     menu.input = mock_input
+#     out, err = capsys.readouterr()
+
+#     assert err == ''
+#     assert out == 'Enter a file name (press enter to select default ec2_host): '
 
 
 # def test_prompt_for_file_empty():
@@ -50,13 +67,13 @@ def test_prompt_for_file_filled():
 #     assert prompt2 == 'test_2'
 
 
-def test_read_template_correct_type():
-    """
-    """
-    input_values = 'testType'
+# def test_read_template_correct_type():
+#     """
+#     """
+#     input_values = 'testType'
 
-    read_template(input_values)
-    assert True
+#     read_template(input_values)
+#     assert True
 
 
 # def test_read_template_wrong_type():
@@ -68,20 +85,20 @@ def test_read_template_correct_type():
 #     assert e.type == IOError
 
 
-def test_read_template_exit():
-    """
-    """
-    input_values = 'exit'
-    with pytest.raises(SystemExit) as e:
-            read_template(input_values)
-    assert e.type == SystemExit
+# def test_read_template_exit():
+#     """
+#     """
+#     input_values = 'exit'
+#     with pytest.raises(SystemExit) as e:
+#             read_template(input_values)
+#     assert e.type == SystemExit
 
 # def test_run_template():
 #     """
 #     """
 
 
-def test_prompt_the_user():
-    """This will test taking in a template,
-    """
-    pass
+# def test_prompt_the_user():
+#     """This will test taking in a template,
+#     """
+#     pass
