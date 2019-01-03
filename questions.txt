@@ -83,7 +83,17 @@ Account for .env file on EC2 instance
 ******************************** Start RDS Instance ********************************
 
 
-Need to add RDS stuff here
+1. Prerequisites:
+    a. Complete set up and create a EC2 instance
+
+aws rds create-db-instance --allocated-storage 20 --db-instance-class db.t2.micro --db-instance-identifier test-instance --engine postgres --master-username master --master-user-password secret99
+
+2. User will need to provide the following:
+    a. storage size : (200 recommended)
+    b. instance class : (db.t2.micro)
+    c. name for instance : USER_DEFINED
+    d. user name :      USER_DEFINED
+    e. user password:   USER_DEFINED
 
 
 
