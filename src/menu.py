@@ -88,6 +88,7 @@ def display_menu():
 
         answer = input('\n(\033[1;31m!\033[0;0m) Execute (\033[1;31mq\033[0;0m) Quit (\033[1;31m?\033[0;0m) Help \
         \nPlease Enter a Selection: ')
+
         if answer == '?':
             print('\nHELP MENU TO GO HERE\n')
             input('Press ENTER to continue...')

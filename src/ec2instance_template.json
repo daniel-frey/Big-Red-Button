@@ -15,7 +15,7 @@
        ""
    ],
 
-   "DryRun": false,
+   "DryRun": true,
 
    "InstanceInitiatedShutdownBehavior": "stop"
 
