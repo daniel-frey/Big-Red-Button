@@ -5,12 +5,13 @@ import pyfiglet
 import getpass
 import json
 import time
+import re
 
 # Gloabl Variables
 aws_host = 'Input Needed'
 security_groups = 'Input Needed'
 aws_security_groups = ''
-region = 'us-west-2'
+region = 'us-west-2a'
 output_format = 'JSON'
 image_id = 'ami-0bbe6b35405ecebdb'
 db_name = 'Input Needed'
@@ -38,7 +39,7 @@ def display_menu():
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name, ready_to_go
     global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups, region
-    while answer != 'quit' or answer != 'exit' or answer != 'q':
+    while answer != '!' or answer != 'q':
         signage()
 
         if aws_host == 'Input Needed':
@@ -172,8 +173,11 @@ def display_menu():
 
         elif answer == '4':
             security_groups = input('Enter a security group (single word): ')
-            if security_groups == '':
+
+            if not re.match("^[~!@#$%^&*()_+{}\":;']+$", security_groups) or (security_groups == ''):
+                print('invalid characters in name')
                 security_groups = 'Input Needed'
+                input('Press ENTER to continue...')
 
         elif answer == '5':
             print('This option is not configurable at this time! ')
@@ -181,8 +185,10 @@ def display_menu():
 
         elif answer == '6':
             db_name = input('Enter the DataBase Name: ')
-            if db_name == '':
+            if not re.match("^[~!@#$%^&*()_+{}\":;']+$", db_name) or db_name == '':
+                print('invalid characters in name')
                 db_name = 'Input Needed'
+                input('Press ENTER to continue...')
 
         elif answer == '7':
             db_instance_id = input('Enter the DataBase Instance ID: ')
@@ -226,6 +232,7 @@ def display_menu():
             if key_name == '':
                 key_name = 'Input Needed'
 
+        # Test Menu to auto generate for testing.
         elif answer == '15':
             aws_host = 'test_host'
             security_groups = 'test_security'
@@ -233,7 +240,7 @@ def display_menu():
             region = 'us-west-2'
             output_format = 'JSON'
             image_id = 'ami-01e24be29428c15b2'
-            db_name = 'test_database'
+            db_name = 'testdatabase'
             db_instance_id = 'test_db_inst'
             db_storage = 20
             db_instance_class = 'db.t2.micro'
@@ -244,7 +251,6 @@ def display_menu():
 
         elif answer == '!':
             if False in ready_to_go:
-                print(ready_to_go)
                 print('Provide ALL required input')
                 input('Press ENTER to continue...')
             else:
@@ -270,9 +276,6 @@ def execute_aws():
     time.sleep(4)
     print('Initiating RDS Instance...')
     send_rds_json_to_aws()
-    time.sleep(4)
-    print('Initiating RDS Instance...')
-    send_rds_json_to_aws
     time.sleep(4)
     print('EC2 & RDS complete.  Running setup on EC2 Instance.')
     exit()
@@ -340,6 +343,17 @@ def send_rds_json_to_aws():
     """Command to create the RDS instance with menu data."""
     os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
+
+
+def get_instance_ip():
+    """Pulls the ip address of the instance."""
+    pass
+
+
+def add_ssh_role():
+    """Will add the ssh role to the security group."""
+    os.system(f'aws ec2 authorize-security-group-ingress --group-id { aws_security_groups } --protocol tcp --port 22 \
+    --cidr 203.0.113.0/24')
 
 
 def clear_screen():
