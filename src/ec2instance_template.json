@@ -14,7 +14,6 @@
    "SecurityGroups": [
        ""
    ],
-
    "DryRun": false,
 
    "InstanceInitiatedShutdownBehavior": "stop"
