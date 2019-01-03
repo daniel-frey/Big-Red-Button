@@ -21,7 +21,7 @@ db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 key_name = 'Input Needed'
-ipv6_address = '0.0.0.0'
+# ipv6_address = '0.0.0.0'
 
 
 def signage():
@@ -198,11 +198,19 @@ def execute_aws():
     print('Initiating EC2 Instance...')
     send_ec2_json_to_aws()
     time.sleep(4)
+<<<<<<< HEAD
     print('Initiating RDS Instance...')
     send_rds_json_to_aws
     time.sleep(4)
     print('EC2 & RDS complete.  Running setup on EC2 Instance.')
     exit()
+=======
+    # print('Initiating RDS Instance...')
+    # send_rds_json_to_aws
+    # time.sleep(4)
+    # print('EC2 & RDS complete.  Running setup on EC2 Instance.')
+    # exit()
+>>>>>>> cc504c371e8e9304d70a68542fada7dc64cdb917
 
 
 def get_aws_sg_id():

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "InstanceType": "t2.micro",
     "KeyName": "",
     "Monitoring": {
@@ -18,5 +19,26 @@
     "DryRun": false,
 
     "InstanceInitiatedShutdownBehavior": "stop"
+=======
+   "InstanceType": "t2.micro",
+   "KeyName": "",
+   "Monitoring": {
+       "Enabled": true
+   },
+   "Placement": {
+       "AvailabilityZone": "us-west-2a"
+   },
+
+   "SecurityGroupIds": [
+       ""
+   ],
+   "SecurityGroups": [
+       ""
+   ],
+
+   "DryRun": false,
+
+   "InstanceInitiatedShutdownBehavior": "stop"
+>>>>>>> cc504c371e8e9304d70a68542fada7dc64cdb917
 
 }

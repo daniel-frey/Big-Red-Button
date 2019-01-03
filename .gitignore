@@ -5,7 +5,7 @@ ENV/
 .vscode
 .idea
 .DS_Store
-
+*complete*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
