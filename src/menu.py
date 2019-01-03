@@ -12,7 +12,7 @@ security_groups = 'Input Needed'
 aws_security_groups = ''
 region = 'us-west-2'
 output_format = 'JSON'
-image_id = 'ami-0bbe6b35405ecebdb'
+image_id = 'ami-01e24be29428c15b2'
 db_name = 'Input Needed'
 db_instance_id = 'Input Needed'
 db_storage = 0
@@ -198,10 +198,10 @@ def execute_aws():
     print('Initiating EC2 Instance...')
     send_ec2_json_to_aws()
     time.sleep(4)
-    # print('Initiating RDS Instance...')
-    # send_rds_json_to_aws
-    # time.sleep(4)
-    # print('EC2 & RDS complete.  Running setup on EC2 Instance.')
+    print('Initiating RDS Instance...')
+    send_rds_json_to_aws
+    time.sleep(4)
+    print('EC2 & RDS complete.  Running setup on EC2 Instance.')
     exit()
 
 
@@ -221,7 +221,7 @@ def write_json():
     global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
     ec2_data = open('ec2instance_template.json').read()
     ec2_json_data = json.loads(ec2_data)
-    ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
+    # ec2_json_data["NetworkInterfaces"][0]["Ipv6Addresses"][0]["Ipv6Address"] = ipv6_address
     ec2_json_data['KeyName'] = key_name
     ec2_json_data['SecurityGroupIds'] = [aws_security_groups]
     ec2_json_data['SecurityGroups'] = [security_groups]
