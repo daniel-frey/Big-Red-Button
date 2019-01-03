@@ -1,3 +1,77 @@
 #!/bin/bash
 sudo apt-get update -y
 sudo apt-get install nginx build-essential python3-pip -y
+cd ~
+git clone {git_repo}.git src
+
+cd src
+pip3 install -r requirements.txt
+pip3 install gunicorn python-dotenv
+
+echo '# gunicorn.service
+[Unit]
+Description=(your description)
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+EnvironmentFile=/home/ubuntu/src/.env
+WorkingDirectory=/home/ubuntu/src
+ExecStart=/home/ubuntu/.local/bin/gunicorn --access-logfile - -w 3 wsgi:app
+
+[Install]
+WantedBy=multi-user.target' > /etc/systemd/system/gunicorn.service
+
+sudo mkdir /etc/systemd/system/nginx.service.d
+
+echo '# nginx.conf
+user www-data;
+worker_processes 4;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    # multi_accept on;
+}
+
+http {
+
+    ##
+    # Basic Settings
+    ##
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+    # server_tokens off;
+
+    server_names_hash_bucket_size 128;
+    # server_name_in_redirect off;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    ##
+    # Logging Settings
+    ##
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    ##
+    # Gzip Settings
+    ##
+
+    gzip on;
+    gzip_disable "msie6";
+
+    ##
+    # Virtual Host Configs
+    ##
+
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}' > /etc/nginx/nginx.conf
