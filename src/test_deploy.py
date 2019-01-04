@@ -48,7 +48,7 @@ def test_user_password():
 def test_user_password_invalid():
     """
     """
-    input_values = ['testhost', 'not_testhost', 'continue', 'test', 'test']
+    input_values = ['testhost', 'not_testhost', 'continue', 'testhost', 'testhost']
 
     def mock_password(s):
         return input_values.pop(0)
