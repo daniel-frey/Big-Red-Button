@@ -11,26 +11,6 @@ def test_cc_import():
     assert menu.signage
 
 
-# def test_json_write():
-#     """
-#     """
-#     aws_host = 'test host'
-#     security_groups = 'testgroup'
-#     aws_security_groups = ''
-#     region = 'us-west-2a'
-#     output_format = 'JSON'
-#     image_id = 'ami-0bbe6b35405ecebdb'
-#     db_name = 'Testdatabase'
-#     db_instance_id = 'instanceDB'
-#     db_storage = 20
-#     db_instance_class = 'db.t2.micro'
-#     db_engine = 'postgres'
-#     db_user_name = 'testuser'
-#     db_user_password = 'password'
-#     key_name = 'dummykey'
-
-#     menu.write_json()
-#     assert rds_json_data['DBName'] == 'Testdatabase'
 
 
 def test_clear_screen(capsys):
@@ -62,7 +42,8 @@ def test_user_password():
     menu.getpass.getpass = mock_input
     words = menu.user_passwords()
 
-    assert words == None
+    assert words is None
+
 
 def test_user_password_invalid():
     """
@@ -81,6 +62,28 @@ def test_user_password_invalid():
 
     assert words is None
 
+# def test_json_write():
+#     """
+#     """
+#     aws_host = 'test host'
+#     security_groups = 'testgroup'
+#     aws_security_groups = ''
+#     region = 'us-west-2a'
+#     output_format = 'JSON'
+#     image_id = 'ami-0bbe6b35405ecebdb'
+#     db_name = 'Testdatabase'
+#     db_instance_id = 'instanceDB'
+#     db_storage = 20
+#     db_instance_class = 'db.t2.micro'
+#     db_engine = 'postgres'
+#     db_user_name = 'testuser'
+#     db_user_password = 'password'
+#     key_name = 'dummykey'
+
+#     menu.write_json()
+#     assert rds_json_data['DBName'] == 'Testdatabase'
+
+
 # def test_exit_output(capsys):
 #     """ tests exit method - checks the output in this function
 #     """
@@ -89,12 +92,6 @@ def test_user_password_invalid():
 
 #     assert err == ''
 #     assert out == 'Thank you for using the application'
-
-
-
-
-
-
 
 
 # def test_prompt_for_file():
