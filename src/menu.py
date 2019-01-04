@@ -26,7 +26,7 @@ gitrepo = 'Input Needed'
 ready_to_go = [False, False, False, False, False, False, False, False, False, False, False, False, False, False]
 
 
-def signage():
+def signage():  # pragma: no cover
     """Create an ascii display based on pyfiglet import.
     Variable result will set what to display on the screen.
     """
@@ -277,7 +277,7 @@ def display_menu():  # pragma: no cover
             input('Press ENTER to continue...')
 
 
-def execute_aws():
+def execute_aws():  # pragma: no cover
     """Calls to functions to generate SG, EC2, and RDS."""
     print('Generating AWS Security Group ID...')
     get_aws_sg_id()
@@ -300,8 +300,8 @@ def execute_aws():
     exit()
 
 
-def get_aws_sg_id():
-    """This fucnton makes a seperate call to AWS to create security group."""
+def get_aws_sg_id():  # pragma: no cover
+    """This function makes a separate call to AWS to create security group."""
     global aws_security_groups
     os.system(f"aws ec2 create-security-group --group-name { security_groups } --description 'Security group for \
     development environment' --output json > sg_id.json")
@@ -311,7 +311,7 @@ def get_aws_sg_id():
     return
 
 
-def write_json():
+def write_json():  # pragma: no cover
     """Function that writes menu data to the JSON file."""
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name
     global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups
@@ -351,13 +351,13 @@ def user_passwords():
     return
 
 
-def send_ec2_json_to_aws():
+def send_ec2_json_to_aws():  # pragma: no cover
     """Command to create the EC2 instance with menu data."""
     os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud_complete.txt')
     return
 
 
-def send_rds_json_to_aws():
+def send_rds_json_to_aws():  # pragma: no cover
     """Command to create the RDS instance with menu data."""
     os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
@@ -378,7 +378,7 @@ def get_instance_ip():
     pass
 
 
-def add_ssh_role():
+def add_ssh_role():  # pragma: no cover
     """Will add the ssh role to the security group."""
     os.system(f'aws ec2 authorize-security-group-ingress --group-id { aws_security_groups } --protocol tcp --port 22 \
     --cidr 0.0.0.0/0')
