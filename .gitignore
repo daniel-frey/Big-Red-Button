@@ -124,3 +124,8 @@ venv.bak/
 # Bash Scripts
 *.sh
 .sh
+
+# json files
+sg_id.json
+rdsinstance_completed.json
+ec2_instance_completed.json

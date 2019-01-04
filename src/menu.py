@@ -22,6 +22,7 @@ db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 key_name = 'Input Needed'
+gitrepo = 'Input Needed'
 ready_to_go = [False, False, False, False, False, False, False, False, False, False, False, False, False, False]
 
 
@@ -34,12 +35,13 @@ def signage():
     print(result)
 
 
-def display_menu():
+def display_menu():  # pragma: no cover
     """."""
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name, ready_to_go
-    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups, region
+    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups, region, gitrepo
     while answer != '!' or answer != 'q':
+        clear_screen()
         signage()
 
         if aws_host == 'Input Needed':
@@ -114,22 +116,30 @@ def display_menu():
             print(f'12.  RDS: DataBase User Password: \033[1;33m HIDDEN \033[0;0m')
             ready_to_go[11] = True
 
-        if security_groups == 'Input Needed':
-            print(f'13.  RDS: DataBase VPC Group: \033[1;31m { security_groups } \033[0;0m')
-            ready_to_go[12] = False
-        else:
-            print(f'13.  RDS: DataBase VPC Group: \033[1;33m { security_groups } \033[0;0m')
-            ready_to_go[12] = True
+        # if security_groups == 'Input Needed':
+        #     print(f'13.  RDS: DataBase VPC Group: \033[1;31m { security_groups } \033[0;0m')
+        #     ready_to_go[12] = False
+        # else:
+        #     print(f'13.  RDS: DataBase VPC Group: \033[1;33m { security_groups } \033[0;0m')
+        #     ready_to_go[12] = True
 
         if key_name == 'Input Needed':
-            print(f'14.  EC2: Key Name: \033[1;31m { key_name } \033[0;0m')
+            print(f'13.  EC2: Key Name: \033[1;31m { key_name } \033[0;0m')
+            ready_to_go[12] = False
+        else:
+            print(f'13.  EC2: Key Name: \033[1;33m { key_name } \033[0;0m')
+            ready_to_go[12] = True
+
+        if gitrepo == 'Input Needed':
+            print(f'14.  GitHub Repository Name: \033[1;31m { gitrepo } \033[0;0m')
             ready_to_go[13] = False
         else:
-            print(f'14.  EC2: Key Name: \033[1;33m { key_name } \033[0;0m')
+            print(f'14.  GitHub Repository Name: \033[1;33m { gitrepo } \033[0;0m')
             ready_to_go[13] = True
 
         answer = input('\n(\033[1;31m!\033[0;0m) Execute (\033[1;31mq\033[0;0m) Quit (\033[1;31m?\033[0;0m) Help \
         \nPlease Enter a Selection: ')
+
         if answer == '?':
             print('1. EC2 Host Name - Single Word.  Used to connect via SSH to the EC2 instance as such: ssh ec2_host')
             print('2. Region - Menu selection:  Determines which region servers are used for instance.')
@@ -143,10 +153,10 @@ def display_menu():
             print('10. RDS DataBase Engine - pre-configured for postgres')
             print('11. RDS User Name - This will create the user name for your DataBase')
             print('12. RDS User Password - This will create the password for your DataBase')
-            print('13. RDS - Will be the same as security group to link the instances')
-            print('14. EC2 Key Name - This must match Key created on AWS')
+            # print('13. RDS - Will be the same as security group to link the instances')
+            print('13. EC2 Key Name - This must match Key created on AWS')
+            print('14. GitHub Repository Name - Enter a repo to clone e.g (https://github.com/daniel-frey/Big-Red-Button.git)')
             print('!   Generates EC2 and RDS based on user provided data.')
-
             input('Press ENTER to continue...')
 
         elif answer == 'q':
@@ -173,8 +183,7 @@ def display_menu():
 
         elif answer == '4':
             security_groups = input('Enter a security group (single word): ')
-
-            if not re.match("^[~!@#$%^&*()_+{}\":;']+$", security_groups) or (security_groups == ''):
+            if not re.match("^[a-z]+$", security_groups) or security_groups == '':
                 print('invalid characters in name')
                 security_groups = 'Input Needed'
                 input('Press ENTER to continue...')
@@ -184,16 +193,18 @@ def display_menu():
             input('Press ENTER to continue...')
 
         elif answer == '6':
-            db_name = input('Enter the DataBase Name: ')
-            if not re.match("^[~!@#$%^&*()_+{}\":;']+$", db_name) or db_name == '':
+            db_name = input('Enter the DataBase Name (single word): ')
+            if not re.match("^[a-z]+$", db_name) or db_name == '':
                 print('invalid characters in name')
                 db_name = 'Input Needed'
                 input('Press ENTER to continue...')
 
         elif answer == '7':
             db_instance_id = input('Enter the DataBase Instance ID: ')
-            if db_instance_id == '':
+            if not re.match("^[a-z]+$", db_instance_id) or db_instance_id == '':
+                print('invalid characters in name')
                 db_instance_id = 'Input Needed'
+                input('Press ENTER to continue...')
 
         elif answer == '8':
             try:
@@ -222,39 +233,42 @@ def display_menu():
         elif answer == '12':
             user_passwords()
 
-        elif answer == '13':
-            vpc_group = input('Enter VPC Group: ')
-            if vpc_group == '':
-                vpc_group = 'Input Needed'
+        # elif answer == '13':
+        #     vpc_group = input('Enter VPC Group: ')
+        #     if vpc_group == '':
+        #         vpc_group = 'Input Needed'
 
-        elif answer == '14':
+        elif answer == '13':
             key_name = input('Enter Key Name: ')
             if key_name == '':
                 key_name = 'Input Needed'
 
+        elif answer == '14':
+            gitrepo = input('Enter a repository to clone: ')
+            if not re.match("^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$", gitrepo) or gitrepo == '':
+                gitrepo = 'Input Needed'
+                                    
         # Test Menu to auto generate for testing.
         elif answer == '15':
-            aws_host = 'test_host'
-            security_groups = 'test_security'
-            aws_security_groups = 'test'
-            region = 'us-west-2'
+            aws_host = 'testhost'
+            security_groups = 'awssecgroup'
+            region = 'us-west-2a'
             output_format = 'JSON'
-            image_id = 'ami-01e24be29428c15b2'
-            db_name = 'testdatabase'
-            db_instance_id = 'test_db_inst'
+            image_id = 'ami-0bbe6b35405ecebdb'
+            db_name = 'splapadabase'
+            db_instance_id = 'testdbinst'
             db_storage = 20
             db_instance_class = 'db.t2.micro'
-            db_engine = 'postgres'
-            db_user_name = 'tester'
-            db_user_password = 'password'
-            key_name = 'test_key'
+            db_user_name = 'testuser'
+            db_user_password = '12345678'
+            key_name = 'aws-automator'
+            gitrepo = 'https://github.com/daniel-frey/Big-Red-Button.git'
 
         elif answer == '!':
             if False in ready_to_go:
                 print('Provide ALL required input')
                 input('Press ENTER to continue...')
             else:
-                print(ready_to_go)
                 execute_aws()
                 exit()
 
@@ -268,8 +282,13 @@ def execute_aws():
     print('Generating AWS Security Group ID...')
     get_aws_sg_id()
     time.sleep(4)
+    add_ssh_role()
+    time.sleep(1)
     print('Generating JSON file...')
     write_json()
+    time.sleep(3)
+    print('Creating AWS UserDate File...')
+    repo_to_clone()
     time.sleep(3)
     print('Initiating EC2 Instance...')
     send_ec2_json_to_aws()
@@ -289,6 +308,7 @@ def get_aws_sg_id():
     sg_aws = open('sg_id.json').read()
     sg_aws_json = json.loads(sg_aws)
     aws_security_groups = sg_aws_json["GroupId"]
+    return
 
 
 def write_json():
@@ -323,11 +343,9 @@ def user_passwords():
     global ready_to_go, db_user_password
     db_user_password = getpass.getpass('Password: ')
     db_user_password1 = getpass.getpass('Enter again for verification: ')
-    if db_user_password != db_user_password1:
-        print('Password do not match.  Try Again.')
+    if db_user_password != db_user_password1 or len(db_user_password) < 8:
+        print('Password do not match or not 8 characters. Try Again.')
         input('Press ENTER to continue...')
-        if ready_to_go is not False:
-            ready_to_go = False
         user_passwords()
     db_user_password1 = ''
     return
@@ -335,7 +353,7 @@ def user_passwords():
 
 def send_ec2_json_to_aws():
     """Command to create the EC2 instance with menu data."""
-    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud.txt')
+    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud_complete.txt')
     return
 
 
@@ -344,6 +362,16 @@ def send_rds_json_to_aws():
     os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
 
+def repo_to_clone():
+    """Choose a repo to clone and send to AWS."""
+    global gitrepo
+    gitfile = open('ud.txt', 'r')
+    formatted = gitfile.read()
+    gitfile.close()
+    clonerepo = formatted.replace('{}', gitrepo)
+    gitfile = open('ud_complete.txt', 'w')
+    gitfile.write(clonerepo)
+    gitfile.close()
 
 def get_instance_ip():
     """Pulls the ip address of the instance."""
@@ -353,7 +381,7 @@ def get_instance_ip():
 def add_ssh_role():
     """Will add the ssh role to the security group."""
     os.system(f'aws ec2 authorize-security-group-ingress --group-id { aws_security_groups } --protocol tcp --port 22 \
-    --cidr 203.0.113.0/24')
+    --cidr 0.0.0.0/0')
 
 
 def clear_screen():
