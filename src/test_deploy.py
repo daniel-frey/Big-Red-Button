@@ -1,16 +1,50 @@
-import sys
-import pytest
+
 from . import menu
+import pytest
+import sys
 # from . import ec2instance_template
 
 
-
 def test_cc_import():
-    """
+    """ Test to see if method exists
     """
     assert menu.signage
 
 
+def test_write_json_exist():
+    """ A test to check for existence of method write json
+    """
+    assert menu.write_json
+
+
+def test_display_execute():
+    """ A test to check for existence of method execute aws
+    """
+    assert menu.execute_aws
+
+
+def test_display_menu_exist():
+    """ A test to check for existence of method display menu
+    """
+    assert menu.display_menu
+
+
+def test_get_aws_sg_id():
+    """ A test to check for existence of method get_aws_sg_id
+    """
+    assert menu.get_aws_sg_id
+
+
+def test_send_ec2_json_to_aws():
+    """ A test to check for existence of method send_ec2_json_to_aws
+    """
+    assert menu.send_ec2_json_to_aws
+
+
+def test_send_rds_json_to_aws():
+    """ A test to check for existence of method send_ec2_json_to_aws
+    """
+    assert menu.send_rds_json_to_aws
 
 
 def test_clear_screen(capsys):
@@ -46,7 +80,7 @@ def test_user_password():
 
 
 def test_user_password_invalid():
-    """
+    """ test checks to see if password method works
     """
     input_values = ['testhost', 'not_testhost', 'continue', 'testhost', 'testhost']
 
@@ -61,6 +95,22 @@ def test_user_password_invalid():
     words = menu.user_passwords()
 
     assert words is None
+
+
+def test_repo_to_clone():
+    """ test to check repo to clone method
+
+    """
+    assert menu.repo_to_clone
+
+# def writetoafile(fname):
+#     with open(fname, 'w') as fp:
+#         fp.write('Hello\n')
+
+# def test_writetofile(tmpdir):
+#     file = tmpdir.join('output.txt')
+#     writetoafile(file.strpath)  # or use str(file)
+#     assert file.read() == 'Hello\n'
 
 # def test_json_write():
 #     """

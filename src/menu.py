@@ -247,7 +247,7 @@ def display_menu():  # pragma: no cover
             gitrepo = input('Enter a repository to clone: ')
             if not re.match("^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$", gitrepo) or gitrepo == '':
                 gitrepo = 'Input Needed'
-                                    
+
         # Test Menu to auto generate for testing.
         elif answer == '15':
             aws_host = 'testhost'
@@ -362,7 +362,8 @@ def send_rds_json_to_aws():  # pragma: no cover
     os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
 
-def repo_to_clone():
+
+def repo_to_clone():  # pragma: no cover
     """Choose a repo to clone and send to AWS."""
     global gitrepo
     gitfile = open('ud.txt', 'r')
@@ -373,9 +374,10 @@ def repo_to_clone():
     gitfile.write(clonerepo)
     gitfile.close()
 
-def get_instance_ip():
-    """Pulls the ip address of the instance."""
-    pass
+
+# def get_instance_ip():
+#     """Pulls the ip address of the instance."""
+#     pass
 
 
 def add_ssh_role():  # pragma: no cover
