@@ -1,14 +1,14 @@
 [run]
 include =
     *.json
-    menu.py
+    src/menu.py
 
 
 [report]
 include =
     *.json
     src/menu.py
-    src/test*
 
 exclude_lines =
     pragma: no cover
+    if __name__ == .__main__.:
