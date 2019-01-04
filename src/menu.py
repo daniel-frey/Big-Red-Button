@@ -261,7 +261,7 @@ def display_menu():  # pragma: no cover
             db_instance_class = 'db.t2.micro'
             db_user_name = 'testuser'
             db_user_password = '12345678'
-            key_name = 'aws-presentation'
+            key_name = 'aws-automator'
             gitrepo = 'https://github.com/daniel-frey/Big-Red-Button.git'
 
         elif answer == '!':
