@@ -3,10 +3,10 @@ set -e
 sudo apt-get update -y && \
 sudo apt-get install nginx build-essential python3-pip -y && \
 
-echo 'git clone https://github.com/daniel-frey/Big-Red-Button.git src' > repo.sh && \
-. repo.sh && \
+mkdir -p /home/ubuntu/src
+git clone https://github.com/daniel-frey/Big-Red-Button.git /home/ubuntu/src && \
 
-cd src
+cd /home/ubuntu/src
 pip3 install -r requirements.txt && \
 pip3 install gunicorn python-dotenv && \
 
