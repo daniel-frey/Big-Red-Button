@@ -155,7 +155,7 @@ def display_menu():  # pragma: no cover
             print('12. RDS User Password - This will create the password for your DataBase')
             # print('13. RDS - Will be the same as security group to link the instances')
             print('13. EC2 Key Name - This must match Key created on AWS')
-            print('14. GitHub Repository Name - Enter a repo to clone e.g (https://github.com/daniel-frey/Big-Red-Button.git)')
+            print('14. GitHub Repository Name - Enter a repo to clone e.g (https://github.com/Sysnove/flask-hello-world.git)')
             print('!   Generates EC2 and RDS based on user provided data.')
             input('Press ENTER to continue...')
 
@@ -251,17 +251,17 @@ def display_menu():  # pragma: no cover
         # Test Menu to auto generate for testing.
         elif answer == '15':
             aws_host = 'testhost'
-            security_groups = 'awssecgroup'
+            security_groups = 'awspresentation'
             region = 'us-west-2a'
             output_format = 'JSON'
             image_id = 'ami-0bbe6b35405ecebdb'
-            db_name = 'splapadabase'
-            db_instance_id = 'testdbinst'
+            db_name = 'awspresentation'
+            db_instance_id = 'presentdb'
             db_storage = 20
             db_instance_class = 'db.t2.micro'
             db_user_name = 'testuser'
             db_user_password = '12345678'
-            key_name = 'aws-automator'
+            key_name = 'aws-presentation'
             gitrepo = 'https://github.com/daniel-frey/Big-Red-Button.git'
 
         elif answer == '!':
