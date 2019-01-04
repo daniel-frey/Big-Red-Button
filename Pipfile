@@ -12,6 +12,7 @@ flask-wtf = "*"
 requests = "*"
 awscli = "*"
 coverage = "*"
+pytest = "*"
 
 [dev-packages]
 pylint = "*"
