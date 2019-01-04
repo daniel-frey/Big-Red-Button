@@ -1,4 +1,4 @@
-import os
+import sys
 import pytest
 from . import menu
 # from . import ec2instance_template
@@ -11,10 +11,87 @@ def test_cc_import():
     assert menu.signage
 
 
-# def test_json_import():
+
+
+def test_clear_screen(capsys):
+    """ tests clear screen method - if method returns true then method works
+    """
+    menu.clear_screen()
+    out, err = capsys.readouterr()
+    assert True
+    assert err == ''
+    assert out == ''
+
+
+def test_exit_system():
+    """ tests exit method - checks the type in this function
+    """
+    with pytest.raises(SystemExit) as e:
+        menu.exit()
+        assert e.type == SystemExit
+
+
+def test_user_password():
+    """
+    """
+    input_values = ['testhost', 'testhost']
+
+    def mock_input(s):
+        return input_values.pop(0)
+
+    menu.getpass.getpass = mock_input
+    words = menu.user_passwords()
+
+    assert words is None
+
+
+def test_user_password_invalid():
+    """
+    """
+    input_values = ['testhost', 'not_testhost', 'continue', 'test', 'test']
+
+    def mock_password(s):
+        return input_values.pop(0)
+
+    def mock_input(s):
+        return input_values.pop(0)
+
+    menu.getpass.getpass = mock_password
+    menu.input = mock_input
+    words = menu.user_passwords()
+
+    assert words is None
+
+# def test_json_write():
 #     """
 #     """
-#     assert ec2_instance_completed
+#     aws_host = 'test host'
+#     security_groups = 'testgroup'
+#     aws_security_groups = ''
+#     region = 'us-west-2a'
+#     output_format = 'JSON'
+#     image_id = 'ami-0bbe6b35405ecebdb'
+#     db_name = 'Testdatabase'
+#     db_instance_id = 'instanceDB'
+#     db_storage = 20
+#     db_instance_class = 'db.t2.micro'
+#     db_engine = 'postgres'
+#     db_user_name = 'testuser'
+#     db_user_password = 'password'
+#     key_name = 'dummykey'
+
+#     menu.write_json()
+#     assert rds_json_data['DBName'] == 'Testdatabase'
+
+
+# def test_exit_output(capsys):
+#     """ tests exit method - checks the output in this function
+#     """
+#     menu.exit()
+#     out, err = capsys.readouterr()
+
+#     assert err == ''
+#     assert out == 'Thank you for using the application'
 
 
 # def test_prompt_for_file():
