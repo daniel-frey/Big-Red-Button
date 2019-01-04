@@ -3,7 +3,7 @@ set -e
 sudo apt-get update -y && \
 sudo apt-get install nginx build-essential python3-pip -y && \
 
-echo 'git clone {} src' > repo.sh && \
+echo 'git clone https://github.com/daniel-frey/Big-Red-Button.git src' > repo.sh && \
 . repo.sh && \
 
 cd src

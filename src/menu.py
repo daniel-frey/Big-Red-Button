@@ -22,7 +22,8 @@ db_engine = 'postgres'
 db_user_name = 'Input Needed'
 db_user_password = 'Input Needed'
 key_name = 'Input Needed'
-ready_to_go = [False, False, False, False, False, False, False, False, False, False, False, False, False]
+gitrepo = 'Input Needed'
+ready_to_go = [False, False, False, False, False, False, False, False, False, False, False, False, False, False]
 
 
 def signage():
@@ -38,7 +39,7 @@ def display_menu():  # pragma: no cover
     """."""
     answer = ''
     global aws_host, security_groups, output_format, image_id, db_name, db_instance_id, key_name, ready_to_go
-    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups, region
+    global db_storage, db_instance_class, db_engine, db_user_name, db_user_password, aws_security_groups, region, gitrepo
     while answer != '!' or answer != 'q':
         clear_screen()
         signage()
@@ -129,6 +130,13 @@ def display_menu():  # pragma: no cover
             print(f'13.  EC2: Key Name: \033[1;33m { key_name } \033[0;0m')
             ready_to_go[12] = True
 
+        if gitrepo == 'Input Needed':
+            print(f'14.  GitHub Repository Name: \033[1;31m { gitrepo } \033[0;0m')
+            ready_to_go[13] = False
+        else:
+            print(f'14.  GitHub Repository Name: \033[1;33m { gitrepo } \033[0;0m')
+            ready_to_go[13] = True
+
         answer = input('\n(\033[1;31m!\033[0;0m) Execute (\033[1;31mq\033[0;0m) Quit (\033[1;31m?\033[0;0m) Help \
         \nPlease Enter a Selection: ')
 
@@ -147,6 +155,7 @@ def display_menu():  # pragma: no cover
             print('12. RDS User Password - This will create the password for your DataBase')
             # print('13. RDS - Will be the same as security group to link the instances')
             print('13. EC2 Key Name - This must match Key created on AWS')
+            print('14. GitHub Repository Name - Enter a repo to clone e.g (https://github.com/daniel-frey/Big-Red-Button.git)')
             print('!   Generates EC2 and RDS based on user provided data.')
             input('Press ENTER to continue...')
 
@@ -234,6 +243,11 @@ def display_menu():  # pragma: no cover
             if key_name == '':
                 key_name = 'Input Needed'
 
+        elif answer == '14':
+            gitrepo = input('Enter a repository to clone: ')
+            if not re.match("^(https|git)(:\/\/|@)([^\/:]+)[\/:]([^\/:]+)\/(.+).git$", gitrepo) or gitrepo == '':
+                gitrepo = 'Input Needed'
+                                    
         # Test Menu to auto generate for testing.
         elif answer == '15':
             aws_host = 'testhost'
@@ -248,6 +262,7 @@ def display_menu():  # pragma: no cover
             db_user_name = 'testuser'
             db_user_password = '12345678'
             key_name = 'aws-automator'
+            gitrepo = 'https://github.com/daniel-frey/Big-Red-Button.git'
 
         elif answer == '!':
             if False in ready_to_go:
@@ -267,8 +282,13 @@ def execute_aws():
     print('Generating AWS Security Group ID...')
     get_aws_sg_id()
     time.sleep(4)
+    add_ssh_role()
+    time.sleep(1)
     print('Generating JSON file...')
     write_json()
+    time.sleep(3)
+    print('Creating AWS UserDate File...')
+    repo_to_clone()
     time.sleep(3)
     print('Initiating EC2 Instance...')
     send_ec2_json_to_aws()
@@ -333,7 +353,7 @@ def user_passwords():
 
 def send_ec2_json_to_aws():
     """Command to create the EC2 instance with menu data."""
-    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud.txt')
+    os.system('aws ec2 run-instances --cli-input-json file://ec2_instance_completed.json --user-data file://ud_complete.txt')
     return
 
 
@@ -342,6 +362,16 @@ def send_rds_json_to_aws():
     os.system('aws rds create-db-instance --cli-input-json file://rdsinstance_template_completed.json')
     return
 
+def repo_to_clone():
+    """Choose a repo to clone and send to AWS."""
+    global gitrepo
+    gitfile = open('ud.txt', 'r')
+    formatted = gitfile.read()
+    gitfile.close()
+    clonerepo = formatted.replace('{}', gitrepo)
+    gitfile = open('ud_complete.txt', 'w')
+    gitfile.write(clonerepo)
+    gitfile.close()
 
 def get_instance_ip():
     """Pulls the ip address of the instance."""
@@ -351,7 +381,7 @@ def get_instance_ip():
 def add_ssh_role():
     """Will add the ssh role to the security group."""
     os.system(f'aws ec2 authorize-security-group-ingress --group-id { aws_security_groups } --protocol tcp --port 22 \
-    --cidr 203.0.113.0/24')
+    --cidr 0.0.0.0/0')
 
 
 def clear_screen():
