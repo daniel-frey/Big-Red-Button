@@ -10,7 +10,7 @@ cd /home/ubuntu/src
 pip3 install -r requirements.txt && \
 pip3 install gunicorn python-dotenv && \
 
-echo '# gunicorn.service
+sudo echo '# gunicorn.service
 [Unit]
 Description=(your description)
 After=network.target
